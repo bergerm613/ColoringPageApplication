@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        File input = new File("smores.jpg");
+        File input = new File("cookies.jpg");
 
         Converter converter = new Converter();
         BufferedImage lineDrawing;

@@ -3,6 +3,9 @@ package coloringpage;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import java.io.File;
 import java.io.IOException;
 
@@ -30,10 +33,38 @@ public class Converter {
             }
         }
 
-        // Blur
-        // Un - invert it
-        // edge finder
+        //     Resource:   http://www.jhlabs.com/ip/blurring.html
+        float[] matrix = new float[400];
+        for (int i = 0; i < 400; i++) {
+            matrix[i] = 1.0f / 400.0f;
+        }
 
-        return image;
+        int blurRad = 300;
+        float[] blurKernel = new float[blurRad*blurRad];
+        for(int i =0; i<blurRad*blurRad; i++) {
+            blurKernel[i] = 1.0f/256.0f;
+        }
+
+
+        BufferedImage blurryImg = processImage(image);
+
+        return blurryImg;
+    }
+    public  BufferedImage processImage(BufferedImage image) {
+        /*
+        Resources:
+        https://www.javatips.net/api/java.awt.image.convolveop
+        https://stackoverflow.com/questions/29295929/java-blur-image
+        * */
+        int radius = 20;
+        int size = radius * 2 + 1;
+        float weight = 1.0f / (size * size);
+        float[] data = new float[size * size];
+
+        for (int i = 0; i < data.length; i++) {
+            data[i] = weight;
+        }
+        BufferedImageOp blurFilter = new ConvolveOp(new Kernel(size, size, data), ConvolveOp.EDGE_ZERO_FILL, null);
+        return blurFilter.filter(image, null);
     }
 }
