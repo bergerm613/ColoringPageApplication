@@ -7,12 +7,12 @@ import java.io.File;
 import java.io.IOException;
 
 public class Main {
-    File input = new File("/Users/esty/Downloads/taffy.jpg");
+    public static void main(String[] args) {
+        File input = new File("smores.jpg");
 
-    Converter converter = new Converter();
-    BufferedImage lineDrawing;
+        Converter converter = new Converter();
+        BufferedImage lineDrawing;
 
-    {
         try {
             lineDrawing = converter.toLineDrawing(input);
 
