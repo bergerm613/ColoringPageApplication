@@ -14,7 +14,7 @@ public class Converter {
         BufferedImage grayImage = grayscaleImage(image);
         BufferedImage invertedAndBlurredImage = invertAndBlurImage(grayImage);
 
-        return dodge(invertedAndBlurredImage, grayImage);
+        return dodgeDivide(invertedAndBlurredImage, grayImage);
     }
 
     private BufferedImage grayscaleImage(BufferedImage image) {
@@ -79,7 +79,11 @@ public class Converter {
         return blurFilter.filter(image, null);
     }
 
-    private BufferedImage dodge(BufferedImage front, BufferedImage back) {
+    /*
+    * A blending mode, which divides the RGB values between two images
+    * Conceptually described further here: https://photoshoptrainingchannel.com/blending-modes-explained/#divide
+    */
+    private BufferedImage dodgeDivide(BufferedImage front, BufferedImage back) {
         //https://www.freecodecamp.org/news/sketchify-turn-any-image-into-a-pencil-sketch-with-10-lines-of-code-cf67fa4f68ce/
         BufferedImage result = cloneImage(front);
 
@@ -91,7 +95,7 @@ public class Converter {
                 int frontValue = new Color(front.getRGB(j, i)).getRed(); //could be any of RGB, red is arbitrary
                 int backValue = new Color(back.getRGB(j, i)).getRed();
 
-                int newValue = frontValue * 255 / (255 - backValue);
+                int newValue = (frontValue + 1) * 255 / (255 - backValue);
                 if (newValue > 255 || backValue == 255) {
                     newValue = 255;
                 }
