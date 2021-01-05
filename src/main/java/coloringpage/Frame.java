@@ -29,7 +29,7 @@ public class Frame extends JFrame {
         super();
         setSize(800, 500);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Met Archives Search Tool");
+        setTitle("Image to Coloring Page");
         setLayout(new BorderLayout());
 
         setTopPanel();
@@ -43,6 +43,7 @@ public class Frame extends JFrame {
     }
 
     private void setTopPanel() {
+        topPanel = new JPanel();
         imagePathLabel = new JLabel("Enter image path:");
         imagePathLabel.setOpaque(true);
 
