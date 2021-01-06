@@ -10,61 +10,73 @@ import java.net.URL;
 
 public class ImageController {
 
-    private JLabel originalImageLabel;
-    private JLabel finalImageLabel;
+    private final JLabel originalImageLabel;
+    private final JLabel finalImageLabel;
+    private final Converter converter = new Converter();;
+
+    private BufferedImage lineDrawing;
 
     public ImageController(JLabel originalImageLabel, JLabel finalImageLabel) {
         this.originalImageLabel = originalImageLabel;
         this.finalImageLabel = finalImageLabel;
     }
 
-    public void setImages(String path) {
-            setOriginalImage(path);
+    public BufferedImage getFinalImage() {
+        if (lineDrawing != null){
+            return lineDrawing;
+        }
+        return null;
+    }
 
-        Converter converter = new Converter();
-        BufferedImage lineDrawing;
+    public void setImages(File imageFile) { //if using local image
+        setOriginalImage(imageFile);
+        setFinalImage(getLineDrawing(imageFile));
+    }
 
+    public void setImages(URL url) {  //if using image from URL
+        setOriginalImage(url);
+        File file = URLtoFile(url);
+        setFinalImage(getLineDrawing(file));
+    }
+
+    private File URLtoFile(URL url) {
+        File file = null;
         try {
-            lineDrawing = converter.toLineDrawing(new File(path));
-            setFinalImage(lineDrawing);
+            BufferedImage bufferedImage = ImageIO.read(url);
+            file = new File("urlImage.jpg");
+            ImageIO.write(bufferedImage, "jpg", file);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
+        return file;
     }
 
-    public void setImages(URL url) {
-        setOriginalImage(url);
-
-        Converter converter = new Converter();
-        BufferedImage lineDrawing;
-
-/*        try {
-  //          lineDrawing = converter.toLineDrawing(new File(path));
-            setFinalImage(lineDrawing);
+    private BufferedImage getLineDrawing(File file) {
+        try {
+            lineDrawing = converter.toLineDrawing(file);
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
-
+        }
+        return lineDrawing;
     }
 
-    private void setFinalImage(BufferedImage image){
+    private void setFinalImage(BufferedImage bufferedImage){
         try{
-            //Image image = ImageIO.read(file);
-            image = (BufferedImage) image.getScaledInstance(400,400, Image.SCALE_SMOOTH);
+            Image image = bufferedImage.getScaledInstance(400,400, BufferedImage.SCALE_SMOOTH);
             finalImageLabel.setIcon(new ImageIcon(image));
         } catch (Exception e) {
-            System.out.println("Error reading Filepath");
+            System.out.println("Error setting final picture");
+            e.printStackTrace();
         }
     }
-    private void setOriginalImage(String string){
+    private void setOriginalImage(File imageFile){
         try{
-            Image image = ImageIO.read(new File(string));
+            Image image = ImageIO.read(imageFile);
             image = image.getScaledInstance(400,400, Image.SCALE_SMOOTH);
             originalImageLabel.setIcon(new ImageIcon(image));
         } catch (Exception e) {
             System.out.println("Error reading Filepath");
+            e.printStackTrace();
         }
     }
 
@@ -75,6 +87,7 @@ public class ImageController {
             originalImageLabel.setIcon(new ImageIcon(image));
         } catch (Exception e) {
             System.out.println("Error reading URL");
+            e.printStackTrace();
         }
     }
 }
