@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-       //File input = new File("cookies.jpg");
+       File input = new File("cookies.jpg");
 
 
         Converter converter = new Converter();
@@ -16,7 +16,7 @@ public class Main {
         Frame frame = new Frame();
         frame.setVisible(true);
 
-/*        try {
+      try {
             lineDrawing = converter.toLineDrawing(input);
 
             File output = new File("line_drawing.jpg");
@@ -24,6 +24,5 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }*/
     }
 }
