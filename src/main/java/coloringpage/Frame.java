@@ -13,16 +13,15 @@ import java.io.File;
 public class Frame extends JFrame {
 
     private JPanel topPanel;
-
     private JTextField pathField;
 
     private JPanel middlePanel;
-    JLabel originalImageLabel = new JLabel();
-    JLabel finalImageLabel = new JLabel();
+    private final JLabel originalImageLabel = new JLabel();
+    private final JLabel finalImageLabel = new JLabel();
 
     private JPanel bottomPanel;
 
-    final JFileChooser fileChooser = new JFileChooser();
+    private final  JFileChooser fileChooser = new JFileChooser();
 
 
     //input field    go button
@@ -89,12 +88,19 @@ public class Frame extends JFrame {
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout());
         JButton saveButton = new JButton("Save As");
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                saveActionPerformed(evt);
+            }
+        });
+
         bottomPanel.add(saveButton);
     }
 
 
     private void browseActionPerformed(ActionEvent evt) {
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Images", "jpg", "png"));
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Images", "jpeg", "jpg", "png"));
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
@@ -107,7 +113,18 @@ public class Frame extends JFrame {
     private void goActionPerformed(ActionEvent evt) {
         ImageController controller = new ImageController(originalImageLabel, finalImageLabel);
         controller.setImages(pathField.getText());
-
     }
+
+    private void saveActionPerformed(ActionEvent evt) {
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+        }
+    }
+
+
+
 
 }
