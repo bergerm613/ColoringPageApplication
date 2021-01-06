@@ -44,7 +44,7 @@ public class Frame extends JFrame {
 
     private void setTopPanel() {
         topPanel = new JPanel();
-        JLabel imagePathLabel = new JLabel("Enter image url or Browse:");
+        JLabel imagePathLabel = new JLabel("Enter image url or browse:");
         imagePathLabel.setOpaque(true);
 
         pathField = new JTextField(30);
