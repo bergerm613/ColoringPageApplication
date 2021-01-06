@@ -107,7 +107,6 @@ public class Frame extends JFrame {
             File imageFile = new File(pathField.getText());
             controller.setImages(imageFile);
         }
-
     }
 
     private void saveLineImage(ActionEvent evt) {
