@@ -22,7 +22,7 @@ public class Frame extends JFrame {
 
     private JPanel bottomPanel;
 
-    ImageController controller = new ImageController(originalImageLabel, finalImageLabel);
+    private final ImageController controller = new ImageController(originalImageLabel, finalImageLabel);
     private final  JFileChooser fileChooser = new JFileChooser();
 
     public Frame() {
@@ -117,7 +117,7 @@ public class Frame extends JFrame {
                 BufferedImage bufferedImage = controller.getFinalImage();
                 File outputFile = fileChooser.getSelectedFile();
                 ImageIO.write(bufferedImage, "jpg", outputFile);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 System.out.println("error saving image");
             }
         }

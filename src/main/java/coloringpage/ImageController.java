@@ -12,7 +12,7 @@ public class ImageController {
 
     private final JLabel originalImageLabel;
     private final JLabel finalImageLabel;
-    private final Converter converter = new Converter();;
+    private final Converter converter = new Converter();
 
     private BufferedImage lineDrawing;
 
@@ -21,11 +21,12 @@ public class ImageController {
         this.finalImageLabel = finalImageLabel;
     }
 
-    public BufferedImage getFinalImage() {
+    public BufferedImage getFinalImage() throws Exception {
         if (lineDrawing != null){
             return lineDrawing;
+        } else {
+            throw new Exception("Line drawing image is null");
         }
-        return null;
     }
 
     public void setImages(File imageFile) { //if using local image
