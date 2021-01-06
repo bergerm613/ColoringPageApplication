@@ -1,13 +1,20 @@
 package coloringpage;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicArrowButton;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+//https://docs.oracle.com/javase/tutorial/uiswing/components/filechooser.html
 
 public class Frame extends JFrame {
 
     private JPanel topPanel;
     private JButton goButton;
+    private JButton browseButton;
 
     private JLabel imagePathLabel;
     private JTextField pathField;
@@ -17,8 +24,9 @@ public class Frame extends JFrame {
     private JLabel finalImageLabel;
 
     private JPanel bottomPanel;
-    private JButton downloadButton;
+    private JButton saveButton;
 
+    final JFileChooser fileChooser = new JFileChooser();
 
 
     //input field    go button
@@ -44,15 +52,25 @@ public class Frame extends JFrame {
 
     private void setTopPanel() {
         topPanel = new JPanel();
-        imagePathLabel = new JLabel("Enter image path:");
+        imagePathLabel = new JLabel("Enter image url or Browse:");
         imagePathLabel.setOpaque(true);
 
-        pathField = new JTextField();
-        pathField.setPreferredSize(new Dimension(160, 30));
+        pathField = new JTextField(30);
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png", "gif", "bmp"));
+        browseButton = new JButton("Browse");
+        browseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                browseActionPerformed(evt);
+            }
+        });
+
 
         goButton = new JButton("Go");
-        topPanel.add(downloadButton);
-
+        topPanel.add(imagePathLabel);
+        topPanel.add(pathField);
+        topPanel.add(browseButton);
+        topPanel.add(goButton);
     }
 
     private void setImagesPanel() {
@@ -60,7 +78,6 @@ public class Frame extends JFrame {
         middlePanel.setLayout(new GridLayout(1,2));
         originalImageLabel = new JLabel();
         finalImageLabel = new JLabel();
-        originalImageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         middlePanel.add(originalImageLabel);
         middlePanel.add(finalImageLabel);
 
@@ -69,8 +86,21 @@ public class Frame extends JFrame {
     private void setBottomPanel() {
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout());
-        downloadButton = new JButton("Download");
-        bottomPanel.add(downloadButton);
+        saveButton = new JButton("Save As");
+        bottomPanel.add(saveButton);
     }
 
+
+    private void browseActionPerformed(ActionEvent evt) {
+
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        int result = fileChooser.showOpenDialog(this);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            pathField.setText(fileChooser.getSelectedFile().getAbsolutePath());
+        }
+        pathField.setText(fileChooser.getSelectedFile().getAbsolutePath());
+    }
 }
