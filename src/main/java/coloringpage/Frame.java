@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 //https://docs.oracle.com/javase/tutorial/uiswing/components/filechooser.html
 
@@ -22,11 +24,6 @@ public class Frame extends JFrame {
     private JPanel bottomPanel;
 
     private final  JFileChooser fileChooser = new JFileChooser();
-
-
-    //input field    go button
-    //view original image left    converted image right
-    //download button
 
     public Frame() {
         super();
@@ -65,7 +62,11 @@ public class Frame extends JFrame {
         goButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                goActionPerformed(evt);
+                try {
+                    goActionPerformed(evt);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -110,9 +111,17 @@ public class Frame extends JFrame {
         }
     }
 
-    private void goActionPerformed(ActionEvent evt) {
+    private void goActionPerformed(ActionEvent evt) throws MalformedURLException {
         ImageController controller = new ImageController(originalImageLabel, finalImageLabel);
-        controller.setImages(pathField.getText());
+        String s = pathField.getText().trim().toLowerCase();
+        boolean isWeb = s.startsWith("http://") || s.startsWith("https://");
+        if (isWeb) {
+            URL url = new URL(pathField.getText());
+            controller.setImages(url);
+        } else {
+            controller.setImages(pathField.getText());
+        }
+
     }
 
     private void saveActionPerformed(ActionEvent evt) {
