@@ -98,9 +98,12 @@ public class Converter {
             for(int j=0; j<width; j++) {
                 int frontValue = new Color(front.getRGB(j, i)).getRed(); //could be any of RGB, red is arbitrary
                 int backValue = new Color(back.getRGB(j, i)).getRed();
-                if(backValue == COLOR_MAX){
+
+                //ensures the next statement won't divide by zero
+                if(backValue == COLOR_MAX) {
                     backValue--;
                 }
+
                 int newValue = (frontValue + 1) * COLOR_MAX / (COLOR_MAX - backValue);
                 if (newValue > COLOR_THRESHOLD || backValue == COLOR_MAX) {
                     newValue = COLOR_MAX;
