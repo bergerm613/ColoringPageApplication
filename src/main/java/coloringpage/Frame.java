@@ -58,7 +58,7 @@ public class Frame extends JFrame {
             try {
                 convertImage(evt);
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Could not read URL.");
             }
         });
 
@@ -117,7 +117,7 @@ public class Frame extends JFrame {
                 File outputFile = fileChooser.getSelectedFile();
                 ImageIO.write(bufferedImage, "jpg", outputFile);
             } catch (Exception e) {
-                System.out.println("error saving image");
+                JOptionPane.showMessageDialog(this, "Error Saving Image.");
             }
         }
     }
