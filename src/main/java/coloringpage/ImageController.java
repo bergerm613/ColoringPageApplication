@@ -21,13 +21,11 @@ public class ImageController {
         this.finalImageLabel = finalImageLabel;
     }
 
-    public BufferedImage getFinalImage() throws Exception {
-        if (lineDrawing != null){
-            return lineDrawing;
-        } else {
+    public BufferedImage getFinalImage() {
+        if (lineDrawing == null) {
             JOptionPane.showMessageDialog(null, "Line drawing image is null.");
-            throw new Exception("Line drawing image is null");
         }
+        return lineDrawing;
     }
 
     public void setImages(File imageFile) { //if using local image
