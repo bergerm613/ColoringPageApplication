@@ -8,12 +8,13 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class Converter {
+
+    private final int COLOR_MAX = 255;
+
     public BufferedImage toLineDrawing(File inputFile) throws IOException {
         BufferedImage image = ImageIO.read(inputFile);
-
         BufferedImage grayImage = grayscaleImage(image);
         BufferedImage invertedAndBlurredImage = invertAndBlurImage(grayImage);
-
         return dodge(invertedAndBlurredImage, grayImage);
     }
 
@@ -45,21 +46,22 @@ public class Converter {
         return blurImage(newImage);
     }
 
-    private void invertImage(BufferedImage image) {
+    private BufferedImage invertImage(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
 
         for(int i=0; i<height; i++) {
             for(int j=0; j<width; j++) {
                 Color c = new Color(image.getRGB(j, i));
-                int red = 255 - c.getRed();
-                int green = 255 - c.getGreen();
-                int blue = 255 - c.getBlue();
+                int red = COLOR_MAX - c.getRed();
+                int green = COLOR_MAX - c.getGreen();
+                int blue = COLOR_MAX - c.getBlue();
 
                 Color newColor = new Color(red, green, blue);
                 image.setRGB(j, i, newColor.getRGB());
             }
         }
+        return image;
     }
 
     private BufferedImage blurImage(BufferedImage image) {
@@ -69,13 +71,13 @@ public class Converter {
         https://stackoverflow.com/questions/29295929/java-blur-image
         */
 
-        int radius = 20;
-        int size = radius * 2 + 1;
+        int radius = 5;
+        int size = radius * 5 + 1;
         float weight = 1.0f / (size * size);
         float[] data = new float[size * size];
 
         Arrays.fill(data, weight);
-        BufferedImageOp blurFilter = new ConvolveOp(new Kernel(size, size, data), ConvolveOp.EDGE_ZERO_FILL, null);
+        BufferedImageOp blurFilter = new ConvolveOp(new Kernel(size, size, data), ConvolveOp.EDGE_NO_OP, null);
         return blurFilter.filter(image, null);
     }
 
@@ -90,10 +92,12 @@ public class Converter {
             for(int j=0; j<width; j++) {
                 int frontValue = new Color(front.getRGB(j, i)).getRed(); //could be any of RGB, red is arbitrary
                 int backValue = new Color(back.getRGB(j, i)).getRed();
-
-                int newValue = frontValue * 255 / (255 - backValue);
-                if (newValue > 255 || backValue == 255) {
-                    newValue = 255;
+                if(backValue == COLOR_MAX){
+                    backValue--;
+                }
+                int newValue = frontValue * COLOR_MAX / (COLOR_MAX - backValue);
+                if (newValue > COLOR_MAX || backValue == COLOR_MAX) {
+                    newValue = COLOR_MAX;
                 }
 
                 Color newColor = new Color(newValue, newValue, newValue);
