@@ -25,6 +25,7 @@ public class ImageController {
         if (lineDrawing != null){
             return lineDrawing;
         } else {
+            JOptionPane.showMessageDialog(null, "Line drawing image is null.");
             throw new Exception("Line drawing image is null");
         }
     }
@@ -47,7 +48,7 @@ public class ImageController {
             file = new File("urlImage.jpg");
             ImageIO.write(bufferedImage, "jpg", file);
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Could not read URL to file.");
         }
         return file;
     }
@@ -66,8 +67,7 @@ public class ImageController {
             Image image = bufferedImage.getScaledInstance(400,400, BufferedImage.SCALE_SMOOTH);
             finalImageLabel.setIcon(new ImageIcon(image));
         } catch (Exception e) {
-            System.out.println("Error setting final picture");
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error setting final picture.");
         }
     }
     private void setOriginalImage(File imageFile){
@@ -76,8 +76,7 @@ public class ImageController {
             image = image.getScaledInstance(400,400, Image.SCALE_SMOOTH);
             originalImageLabel.setIcon(new ImageIcon(image));
         } catch (Exception e) {
-            System.out.println("Error reading Filepath");
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error reading Filepath.");
         }
     }
 
@@ -87,8 +86,7 @@ public class ImageController {
             image = image.getScaledInstance(400,400, Image.SCALE_SMOOTH);
             originalImageLabel.setIcon(new ImageIcon(image));
         } catch (Exception e) {
-            System.out.println("Error reading URL");
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error reading URL.");
         }
     }
 }
