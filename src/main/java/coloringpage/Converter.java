@@ -10,6 +10,7 @@ import java.util.Arrays;
 public class Converter {
 
     private final int COLOR_MAX = 255;
+    private final int COLOR_THRESHOLD = 240; //the lowest RGB number that will show in the final image
 
     public BufferedImage toLineDrawing(File inputFile) throws IOException {
         BufferedImage image = ImageIO.read(inputFile);
@@ -101,8 +102,10 @@ public class Converter {
                     backValue--;
                 }
                 int newValue = (frontValue + 1) * COLOR_MAX / (COLOR_MAX - backValue);
-                if (newValue > COLOR_MAX || backValue == COLOR_MAX) {
+                if (newValue > COLOR_THRESHOLD || backValue == COLOR_MAX) {
                     newValue = COLOR_MAX;
+                } else {
+                    newValue = 0;
                 }
 
                 Color newColor = new Color(newValue, newValue, newValue);
