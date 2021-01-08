@@ -20,5 +20,5 @@
 2. Hit convert. 
 3. Save your photo!  
 
-![dog](dog.png)
+![dog](flower.jpeg)
 
