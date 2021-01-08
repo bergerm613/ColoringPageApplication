@@ -11,7 +11,7 @@ public class Converter {
 
     private final int COLOR_MAX = 255; //white
     private final int COLOR_MIN = 0; //black
-    
+
     public BufferedImage toLineDrawing(File inputFile) throws IOException {
         BufferedImage image = ImageIO.read(inputFile);
 
@@ -133,6 +133,7 @@ public class Converter {
             int percent = 100 * (pixel / INPUT_LEVEL_RANGE);
             pixel = (percent / 100) * COLOR_MAX;
         }
+        
         return pixel;
     }
 
