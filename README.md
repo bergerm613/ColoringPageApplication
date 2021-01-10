@@ -9,7 +9,7 @@
 3. Blurring the image. 
 4. Color and Dodge - divide the original image by the inverted/blurred top layer to receive only the dark edges. 
 
-
+You can see the jar file [here](build/libs/ColoringPageApplication-1.0-SNAPSHOT.jar)
 ### Contributers
 [Michelle Berger](https://github.com/bergerm613)   
 [Lillian Liebman](https://github.com/lliebman)    
@@ -20,5 +20,5 @@
 2. Hit convert. 
 3. Save your photo!  
 
-![dog](dog.png)
+![dog](flower.jpeg)
 
