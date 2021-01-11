@@ -22,8 +22,13 @@ public class Frame extends JFrame {
 
     private JPanel bottomPanel;
 
-    private final ImageController controller = new ImageController(originalImageLabel, finalImageLabel);
     private final  JFileChooser fileChooser = new JFileChooser();
+
+    private final ConverterFactory converterFactory = new ConverterFactory();
+    private final ImageController controller = new ImageController(
+            converterFactory.getInstance(),
+            originalImageLabel,
+            finalImageLabel);
 
     public Frame() {
         super();

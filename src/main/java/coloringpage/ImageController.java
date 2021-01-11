@@ -12,13 +12,14 @@ public class ImageController {
 
     private final JLabel originalImageLabel;
     private final JLabel finalImageLabel;
-    private final Converter converter = new Converter();
+    private final Converter converter;
 
     private BufferedImage lineDrawing;
 
-    public ImageController(JLabel originalImageLabel, JLabel finalImageLabel) {
+    public ImageController(Converter converter, JLabel originalImageLabel, JLabel finalImageLabel) {
         this.originalImageLabel = originalImageLabel;
         this.finalImageLabel = finalImageLabel;
+        this.converter = converter;
     }
 
     public BufferedImage getFinalImage() {
