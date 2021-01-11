@@ -9,8 +9,8 @@ import java.util.Arrays;
 
 public class Converter {
 
-    private final int COLOR_MAX = 255;
-    private final int COLOR_THRESHOLD = 240; //the lowest RGB number that will show in the final image
+    private final int COLOR_MAX = 255; //white
+    private final int COLOR_MIN = 0; //black
 
     public BufferedImage toLineDrawing(File inputFile) throws IOException {
         BufferedImage image = ImageIO.read(inputFile);
@@ -21,9 +21,8 @@ public class Converter {
         return dodgeDivide(invertedAndBlurredImage, grayImage);
     }
 
+    //https://www.tutorialspoint.com/java_dip/grayscale_conversion.htm
     private BufferedImage grayscaleImage(BufferedImage image) {
-        //https://www.tutorialspoint.com/java_dip/grayscale_conversion.htm
-
         int width = image.getWidth();
         int height = image.getHeight();
 
@@ -66,12 +65,12 @@ public class Converter {
         }
     }
 
+    /**
+     * Resources:
+     * https://www.javatips.net/api/java.awt.image.convolveop
+     * https://stackoverflow.com/questions/29295929/java-blur-image
+     */
     private BufferedImage blurImage(BufferedImage image) {
-        /*
-        Resources:
-        https://www.javatips.net/api/java.awt.image.convolveop
-        https://stackoverflow.com/questions/29295929/java-blur-image
-        */
 
         int radius = 5;
         int size = radius * 5 + 1;
@@ -83,12 +82,12 @@ public class Converter {
         return blurFilter.filter(image, null);
     }
 
-    /*
+    /**
     * A blending mode, which divides the RGB values between two images
     * Conceptually described further here: https://photoshoptrainingchannel.com/blending-modes-explained/#divide
-    */
+    * https://www.freecodecamp.org/news/sketchify-turn-any-image-into-a-pencil-sketch-with-10-lines-of-code-cf67fa4f68ce/
+     **/
     private BufferedImage dodgeDivide(BufferedImage front, BufferedImage back) {
-        //https://www.freecodecamp.org/news/sketchify-turn-any-image-into-a-pencil-sketch-with-10-lines-of-code-cf67fa4f68ce/
         BufferedImage result = cloneImage(front);
 
         int width = front.getWidth();
@@ -103,13 +102,9 @@ public class Converter {
                 if(backValue == COLOR_MAX) {
                     backValue--;
                 }
-
                 int newValue = (frontValue + 1) * COLOR_MAX / (COLOR_MAX - backValue);
-                if (newValue > COLOR_THRESHOLD || backValue == COLOR_MAX) {
-                    newValue = COLOR_MAX;
-                } else {
-                    newValue = 0;
-                }
+
+                newValue = adjustLevels(newValue);
 
                 Color newColor = new Color(newValue, newValue, newValue);
                 result.setRGB(j, i, newColor.getRGB());
@@ -119,8 +114,31 @@ public class Converter {
         return result;
     }
 
+
+    /**
+    A rudimentary equivalent of adjusting intensity levels of image shadows, midtones, and highlights
+    https://helpx.adobe.com/photoshop/using/levels-adjustment.html
+     **/
+    private int adjustLevels(int pixel) {
+        int BLACK_INPUT_LEVEL = 150;
+        int WHITE_INPUT_LEVEL = 255;
+        int INPUT_LEVEL_RANGE = WHITE_INPUT_LEVEL - BLACK_INPUT_LEVEL;
+
+        if (pixel < BLACK_INPUT_LEVEL) {
+            pixel = COLOR_MIN; //black
+        } else if (pixel > COLOR_MAX) {
+            pixel = COLOR_MAX;
+        } else {
+            pixel = pixel - BLACK_INPUT_LEVEL;
+            int percent = 100 * (pixel / INPUT_LEVEL_RANGE);
+            pixel = (percent / 100) * COLOR_MAX;
+        }
+        
+        return pixel;
+    }
+
+    //https://bytenota.com/java-cloning-a-bufferedimage-object/
     private BufferedImage cloneImage(BufferedImage image) {
-        //https://bytenota.com/java-cloning-a-bufferedimage-object/
         ColorModel colorModel = image.getColorModel();
         WritableRaster raster = image.copyData(null);
         boolean isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
