@@ -29,15 +29,20 @@ public class ImageController {
         return lineDrawing;
     }
 
-    public void setImages(File imageFile) { //if using local image
-        setOriginalImage(imageFile);
-        setFinalImage(getLineDrawing(imageFile));
+    public void setImages(File imageFile) throws IOException { //if using local image
+        Image image = ImageIO.read(imageFile);
+        setImages(image, imageFile);
     }
 
-    public void setImages(URL url) {  //if using image from URL
-        setOriginalImage(url);
+    public void setImages(URL url) throws IOException {  //if using image from URL
         File file = URLtoFile(url);
-        setFinalImage(getLineDrawing(file));
+        Image image = ImageIO.read(file);
+        setImages(image, file);
+    }
+
+    public void setImages(Image image, File imageFile) { //made for testing purposes
+        setOriginalImage(image);
+        setFinalImage(getLineDrawing(imageFile));
     }
 
     private File URLtoFile(URL url) {
@@ -69,23 +74,12 @@ public class ImageController {
             JOptionPane.showMessageDialog(null, "Error setting final picture.");
         }
     }
-    private void setOriginalImage(File imageFile){
+    private void setOriginalImage(Image image){
         try{
-            Image image = ImageIO.read(imageFile);
             image = image.getScaledInstance(400,400, Image.SCALE_SMOOTH);
             originalImageLabel.setIcon(new ImageIcon(image));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error reading Filepath.");
-        }
-    }
-
-    private void setOriginalImage(URL url){
-        try{
-            Image image = ImageIO.read(url);
-            image = image.getScaledInstance(400,400, Image.SCALE_SMOOTH);
-            originalImageLabel.setIcon(new ImageIcon(image));
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error reading URL.");
         }
     }
 }

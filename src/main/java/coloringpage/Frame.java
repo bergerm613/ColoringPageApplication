@@ -30,7 +30,7 @@ public class Frame extends JFrame {
             originalImageLabel,
             finalImageLabel);
 
-    public Frame() {
+    public Frame() throws IOException {
         super();
         setSize(800, 500);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -47,7 +47,7 @@ public class Frame extends JFrame {
         add(bottomPanel, BorderLayout.PAGE_END);
     }
 
-    private void setTopPanel() {
+    private void setTopPanel() throws IOException {
         topPanel = new JPanel();
         JLabel imagePathLabel = new JLabel("Enter image url or browse:");
         imagePathLabel.setOpaque(true);
@@ -62,9 +62,10 @@ public class Frame extends JFrame {
         goButton.addActionListener(evt -> {
             try {
                 convertImage(evt);
-            } catch (MalformedURLException e) {
-                JOptionPane.showMessageDialog(this, "Could not read URL.");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
         });
 
         topPanel.add(imagePathLabel);
@@ -101,7 +102,7 @@ public class Frame extends JFrame {
         }
     }
 
-    private void convertImage(ActionEvent evt) throws MalformedURLException {
+    private void convertImage(ActionEvent evt) throws IOException {
         String s = pathField.getText().trim().toLowerCase();
         boolean isWeb = s.startsWith("http://") || s.startsWith("https://");
 
@@ -127,5 +128,7 @@ public class Frame extends JFrame {
         }
     }
 
-
+    public static void main(String[] args) throws IOException {
+        new Frame().setVisible(true);
+    }
 }

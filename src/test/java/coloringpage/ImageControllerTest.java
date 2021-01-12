@@ -1,9 +1,11 @@
 package coloringpage;
 
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import javax.swing.*;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +17,31 @@ import static org.mockito.Mockito.*;
 public class ImageControllerTest {
 
     @Test
-    public void getFinalImage() {
+    public void getFinalImage() throws IOException {
+        JLabel originalImageLabel = mock(JLabel.class);
+        JLabel finalImageLabel = mock(JLabel.class);
+        Converter converter = mock(Converter.class);
+        ImageController controller = new ImageController(converter, originalImageLabel, finalImageLabel);
+
+        File file = mock(File.class);
+        Image image = mock(Image.class);
+        BufferedImage expectedImage = mock(BufferedImage.class);
+
+        doReturn(expectedImage).when(converter).toLineDrawing(file);
+        doReturn(image).when(expectedImage).getScaledInstance(400,400, Image.SCALE_SMOOTH);
+        doReturn(image).when(image).getScaledInstance(400,400, Image.SCALE_SMOOTH);
+
+        controller.setImages(image, file);
+
+        //when
+        BufferedImage actualImage = controller.getFinalImage();
+
+        //then
+        assertEquals(expectedImage, actualImage);
+    }
+
+    @Test
+    public void getFinalImage_nullImage() {
         //given
         JLabel originalImageLabel = mock(JLabel.class);
         JLabel finalImageLabel = mock(JLabel.class);
@@ -26,62 +52,49 @@ public class ImageControllerTest {
         controller.getFinalImage();
 
         //then
-
-
+        verifyNoMoreInteractions(finalImageLabel);
     }
 
+
     @Test
-    public void setImages_withFile() throws IOException {
+    public void setImages() throws IOException {
         JLabel originalImageLabel = mock(JLabel.class);
         JLabel finalImageLabel = mock(JLabel.class);
         Converter converter = mock(Converter.class);
         ImageController controller = new ImageController(converter, originalImageLabel, finalImageLabel);
 
         File file = mock(File.class);
+        Image image = mock(Image.class);
+        BufferedImage expectedImage = mock(BufferedImage.class);
 
-        ImageIcon icon1 = mock(ImageIcon.class);
+        doReturn(expectedImage).when(converter).toLineDrawing(file);
+        doReturn(image).when(expectedImage).getScaledInstance(400,400, Image.SCALE_SMOOTH);
+        doReturn(image).when(image).getScaledInstance(400,400, Image.SCALE_SMOOTH);
 
-
-
-
-        ImageIcon icon2 = mock(ImageIcon.class);
-        BufferedImage image2 = mock(BufferedImage.class);
-        doReturn(image2).when(converter).toLineDrawing(file);
-        doReturn(icon2).when(new ImageIcon(image2));
+        ArgumentCaptor<ImageIcon> iconCaptor = ArgumentCaptor.forClass(ImageIcon.class);
 
         //when
-        controller.setImages(file);
+        controller.setImages(image, file);
 
         //then
-        verify(originalImageLabel).setIcon(icon1);
-        verify(finalImageLabel).setIcon(icon2);
+        verify(originalImageLabel).setIcon(iconCaptor.capture());
+        ImageIcon iconCaptorValue = iconCaptor.getValue();
+        assertEquals(ImageIcon.class, iconCaptorValue.getClass());
+
+        verify(finalImageLabel).setIcon(iconCaptor.capture());
+        iconCaptorValue = iconCaptor.getValue();
+        assertEquals(ImageIcon.class, iconCaptorValue.getClass());
     }
 
-    @Test
-    public void testSetImages_withURL() {
+    @Test (expected = IllegalArgumentException.class)
+    public void testSetImages_badLink() throws IOException {
         JLabel originalImageLabel = mock(JLabel.class);
         JLabel finalImageLabel = mock(JLabel.class);
-        ImageController controller = new ImageController(originalImageLabel, finalImageLabel);
-        URL url = mock(URL.class);
+        Converter converter = mock(Converter.class);
+        ImageController controller = new ImageController(converter, originalImageLabel, finalImageLabel);
+        URL badURL = new URL("http://notarealurlhimom.html");
 
         //when
-        controller.setImages(url);
-
-        //then
-
-
-    }
-
-    @Test
-    public void testSetImages_badLink() {
-        //given
-
-
-        //when
-
-
-        //then
-
-
+        controller.setImages(badURL);
     }
 }
