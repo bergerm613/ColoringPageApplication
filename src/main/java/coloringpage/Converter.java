@@ -122,8 +122,8 @@ public class Converter {
     https://helpx.adobe.com/photoshop/using/levels-adjustment.html
      **/
     private int adjustLevels(int pixel) {
-        int BLACK_INPUT_LEVEL = 150;
-        int WHITE_INPUT_LEVEL = 255;
+        int BLACK_INPUT_LEVEL = 140;
+        int WHITE_INPUT_LEVEL = 245;
         int INPUT_LEVEL_RANGE = WHITE_INPUT_LEVEL - BLACK_INPUT_LEVEL;
 
         if (pixel < BLACK_INPUT_LEVEL) {

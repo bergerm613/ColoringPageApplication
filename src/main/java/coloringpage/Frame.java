@@ -60,7 +60,7 @@ public class Frame extends JFrame {
             try {
                 convertImage(evt);
             } catch (IOException e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Cannot read input file.");
             }
         });
 
