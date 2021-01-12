@@ -8,6 +8,7 @@
 2. Inverting the image. 
 3. Blurring the image. 
 4. Color and Dodge - divide the original image by the inverted/blurred top layer to receive only the dark edges. 
+5. Adjusting input black and white levels
 
 You can see the jar file [here](build/libs/ColoringPageApplication-1.0-SNAPSHOT.jar)
 ### Contributers
@@ -20,5 +21,5 @@ You can see the jar file [here](build/libs/ColoringPageApplication-1.0-SNAPSHOT.
 2. Hit convert. 
 3. Save your photo!  
 
-![dog](flower.jpeg)
+![flower to line drawing](flower.jpeg)
 

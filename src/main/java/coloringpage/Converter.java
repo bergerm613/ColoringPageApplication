@@ -14,7 +14,10 @@ public class Converter {
 
     public BufferedImage toLineDrawing(File inputFile) throws IOException {
         BufferedImage image = ImageIO.read(inputFile);
+        return toLineDrawing(image);
+    }
 
+    public BufferedImage toLineDrawing(BufferedImage image){
         BufferedImage grayImage = grayscaleImage(image);
         BufferedImage invertedAndBlurredImage = invertAndBlurImage(grayImage);
 
@@ -110,7 +113,6 @@ public class Converter {
                 result.setRGB(j, i, newColor.getRGB());
             }
         }
-
         return result;
     }
 
@@ -133,7 +135,6 @@ public class Converter {
             int percent = 100 * (pixel / INPUT_LEVEL_RANGE);
             pixel = (percent / 100) * COLOR_MAX;
         }
-        
         return pixel;
     }
 
