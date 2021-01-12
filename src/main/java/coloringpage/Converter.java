@@ -113,7 +113,6 @@ public class Converter {
                 result.setRGB(j, i, newColor.getRGB());
             }
         }
-
         return result;
     }
 

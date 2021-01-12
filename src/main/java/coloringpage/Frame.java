@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Frame extends JFrame {
@@ -41,7 +40,6 @@ public class Frame extends JFrame {
         setImagesPanel();
         setBottomPanel();
 
-
         add(topPanel, BorderLayout.PAGE_START);
         add(middlePanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.PAGE_END);
@@ -57,7 +55,6 @@ public class Frame extends JFrame {
         JButton browseButton = new JButton("Browse");
         browseButton.addActionListener(this::browseFiles);
 
-
         JButton goButton = new JButton("Convert");
         goButton.addActionListener(evt -> {
             try {
@@ -65,7 +62,6 @@ public class Frame extends JFrame {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         });
 
         topPanel.add(imagePathLabel);
@@ -86,7 +82,6 @@ public class Frame extends JFrame {
         bottomPanel.setLayout(new FlowLayout());
         JButton saveButton = new JButton("Save As");
         saveButton.addActionListener(this::saveLineImage);
-
         bottomPanel.add(saveButton);
     }
 
