@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public class Frame extends JFrame {
+public class ImageConverterFrame extends JFrame {
 
     private JPanel topPanel;
     private JTextField pathField;
@@ -23,13 +23,14 @@ public class Frame extends JFrame {
 
     private final  JFileChooser fileChooser = new JFileChooser();
 
-    private final ConverterFactory converterFactory = new ConverterFactory();
+    private final ImageToOutlineConverter converter = new ImageToOutlineConverter();
+
     private final ImageController controller = new ImageController(
-            converterFactory.getInstance(),
+            converter,
             originalImageLabel,
             finalImageLabel);
 
-    public Frame() throws IOException {
+    public ImageConverterFrame() throws IOException {
         super();
         setSize(800, 500);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -124,6 +125,6 @@ public class Frame extends JFrame {
     }
 
     public static void main(String[] args) throws IOException {
-        new Frame().setVisible(true);
+        new ImageConverterFrame().setVisible(true);
     }
 }
