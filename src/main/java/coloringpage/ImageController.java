@@ -12,11 +12,11 @@ public class ImageController {
 
     private final JLabel originalImageLabel;
     private final JLabel finalImageLabel;
-    private final Converter converter;
+    private final ImageToOutlineConverter converter;
 
     private BufferedImage lineDrawing;
 
-    public ImageController(Converter converter, JLabel originalImageLabel, JLabel finalImageLabel) {
+    public ImageController(ImageToOutlineConverter converter, JLabel originalImageLabel, JLabel finalImageLabel) {
         this.originalImageLabel = originalImageLabel;
         this.finalImageLabel = finalImageLabel;
         this.converter = converter;
@@ -30,39 +30,22 @@ public class ImageController {
     }
 
     public void setImages(File imageFile) throws IOException { //if using local image
-        Image image = ImageIO.read(imageFile);
-        setImages(image, imageFile);
+        BufferedImage image = ImageIO.read(imageFile);
+        setImages(image);
     }
 
-    public void setImages(URL url) throws IOException {  //if using image from URL
-        File file = URLtoFile(url);
-        Image image = ImageIO.read(file);
-        setImages(image, file);
+    public void setImages(URL url) throws IOException {  //if using image from URL\
+        BufferedImage image = ImageIO.read(url);
+        setImages(image);
     }
 
-    public void setImages(Image image, File imageFile) { //made for testing purposes
+    public void setImages(BufferedImage image) { //made for testing purposes
         setOriginalImage(image);
-        setFinalImage(getLineDrawing(imageFile));
+        setFinalImage(getLineDrawing(image));
     }
 
-    private File URLtoFile(URL url) {
-        File file = null;
-        try {
-            BufferedImage bufferedImage = ImageIO.read(url);
-            file = new File("urlImage.jpg");
-            ImageIO.write(bufferedImage, "jpg", file);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Could not read URL to file.");
-        }
-        return file;
-    }
-
-    private BufferedImage getLineDrawing(File file) {
-        try {
-            lineDrawing = converter.toLineDrawing(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private BufferedImage getLineDrawing(BufferedImage image) {
+        lineDrawing = converter.toLineDrawing(image);
         return lineDrawing;
     }
 
@@ -74,9 +57,9 @@ public class ImageController {
             JOptionPane.showMessageDialog(null, "Error setting final picture.");
         }
     }
-    private void setOriginalImage(Image image){
-        try{
-            image = image.getScaledInstance(400,400, Image.SCALE_SMOOTH);
+    private void setOriginalImage(Image image) {
+        try {
+            image = image.getScaledInstance(400, 400, Image.SCALE_SMOOTH);
             originalImageLabel.setIcon(new ImageIcon(image));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error reading Filepath.");

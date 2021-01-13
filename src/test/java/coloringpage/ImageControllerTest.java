@@ -3,6 +3,7 @@ package coloringpage;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import javax.imageio.IIOException;
 import javax.swing.*;
 
 import java.awt.*;
@@ -20,18 +21,17 @@ public class ImageControllerTest {
     public void getFinalImage() throws IOException {
         JLabel originalImageLabel = mock(JLabel.class);
         JLabel finalImageLabel = mock(JLabel.class);
-        Converter converter = mock(Converter.class);
+        ImageToOutlineConverter converter = mock(ImageToOutlineConverter.class);
         ImageController controller = new ImageController(converter, originalImageLabel, finalImageLabel);
 
-        File file = mock(File.class);
-        Image image = mock(Image.class);
+        BufferedImage image = mock(BufferedImage.class);
         BufferedImage expectedImage = mock(BufferedImage.class);
 
-        doReturn(expectedImage).when(converter).toLineDrawing(file);
+        doReturn(expectedImage).when(converter).toLineDrawing(image);
         doReturn(image).when(expectedImage).getScaledInstance(400,400, Image.SCALE_SMOOTH);
         doReturn(image).when(image).getScaledInstance(400,400, Image.SCALE_SMOOTH);
 
-        controller.setImages(image, file);
+        controller.setImages(image);
 
         //when
         BufferedImage actualImage = controller.getFinalImage();
@@ -45,7 +45,7 @@ public class ImageControllerTest {
         //given
         JLabel originalImageLabel = mock(JLabel.class);
         JLabel finalImageLabel = mock(JLabel.class);
-        Converter converter = mock(Converter.class);
+        ImageToOutlineConverter converter = mock(ImageToOutlineConverter.class);
         ImageController controller = new ImageController(converter, originalImageLabel, finalImageLabel);
 
         //when
@@ -60,21 +60,20 @@ public class ImageControllerTest {
     public void setImages() throws IOException {
         JLabel originalImageLabel = mock(JLabel.class);
         JLabel finalImageLabel = mock(JLabel.class);
-        Converter converter = mock(Converter.class);
+        ImageToOutlineConverter converter = mock(ImageToOutlineConverter.class);
         ImageController controller = new ImageController(converter, originalImageLabel, finalImageLabel);
 
-        File file = mock(File.class);
-        Image image = mock(Image.class);
+        BufferedImage image = mock(BufferedImage.class);
         BufferedImage expectedImage = mock(BufferedImage.class);
 
-        doReturn(expectedImage).when(converter).toLineDrawing(file);
+        doReturn(expectedImage).when(converter).toLineDrawing(image);
         doReturn(image).when(expectedImage).getScaledInstance(400,400, Image.SCALE_SMOOTH);
         doReturn(image).when(image).getScaledInstance(400,400, Image.SCALE_SMOOTH);
 
         ArgumentCaptor<ImageIcon> iconCaptor = ArgumentCaptor.forClass(ImageIcon.class);
 
         //when
-        controller.setImages(image, file);
+        controller.setImages(image);
 
         //then
         verify(originalImageLabel).setIcon(iconCaptor.capture());
@@ -86,11 +85,11 @@ public class ImageControllerTest {
         assertEquals(ImageIcon.class, iconCaptorValue.getClass());
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test (expected = IIOException.class)
     public void testSetImages_badLink() throws IOException {
         JLabel originalImageLabel = mock(JLabel.class);
         JLabel finalImageLabel = mock(JLabel.class);
-        Converter converter = mock(Converter.class);
+        ImageToOutlineConverter converter = mock(ImageToOutlineConverter.class);
         ImageController controller = new ImageController(converter, originalImageLabel, finalImageLabel);
         URL badURL = new URL("http://notarealurlhimom.html");
 

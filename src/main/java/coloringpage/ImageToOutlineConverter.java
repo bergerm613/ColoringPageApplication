@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class Converter {
+public class ImageToOutlineConverter {
 
     private final int COLOR_MAX = 255; //white
     private final int COLOR_MIN = 0; //black
